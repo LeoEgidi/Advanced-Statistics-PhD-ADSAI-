@@ -1,0 +1,182 @@
+%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% First comes an example EPS file -- just ignore it and
+% proceed on the \documentclass line
+% your LaTeX will extract the file if required
+%\begin{filecontents*}{example.eps}
+%%!PS-Adobe-3.0 EPSF-3.0
+%%%BoundingBox: 19 19 221 221
+%%%CreationDate: Mon Sep 29 1997
+%%%Creator: programmed by hand (JK)
+%%%EndComments
+%gsave
+%newpath
+%  20 20 moveto
+%  20 220 lineto
+%  220 220 lineto
+%  220 20 lineto
+%closepath
+%2 setlinewidth
+%gsave
+%  .4 setgray fill
+%grestore
+%stroke
+%grestore
+%\end{filecontents*}
+%%
+%\RequirePackage{fix-cm}
+%%
+%\documentclass{svjour3}                     % onecolumn (standard format)
+%\documentclass[smallcondensed]{svjour3}      % onecolumn (ditto)
+%\documentclass[smallextended]{svjour3}       % onecolumn (second format)
+\documentclass[12pt]{article}            % twocolumn
+%
+%\smartqed  % flush right qed marks, e.g. at end of proof
+%
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{bm}
+%\usepackage{enumitem}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}
+%
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={170mm,257mm},
+ left=20mm,
+ top=20mm,
+ }
+% \usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
+\usepackage{float}
+\usepackage{subfig}
+
+%\setcitestyle{aysep={}} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{paralist}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{url}
+
+\newcommand{\ev}[1]{\textbf{#1}}
+\newcommand{\cita}[1]{{\it #1}}
+\newcommand{\ed}{\end{document}}
+\newcommand{\G}{\mathcal G}
+\newcommand{\vy}{{\bm y}}
+\newcommand{\vz}{{\bm z}}
+\newcommand{\vmu}{{\bm \mu}}
+\newcommand{\vpi}{{\bm \pi}}
+\newcommand{\ca}[1]{\ensuremath{[#1]_h}}
+\newcommand{\uno}[1]{\ensuremath{\left|#1\right|}}
+\newcommand{\data}{\ensuremath{\mathcal D}}
+\newcommand{\hh}{\mathcal H}
+\newcommand{\hG}{G}
+\newcommand{\quoteref}[1]{{\it #1}}
+
+\begin{document}
+
+\title{\large{
+\textbf{Final Exam for \emph{Advanced topics in statistical modeling}}\\
+ADSAI PhD Course 2021-2022 }\\
+Due on: September, 10th}
+%
+%
+\date{}
+\maketitle
+%
+\hspace{-0.8cm}
+\textbf{Instructors} \\
+
+Nicola Torelli (DEAMS, University of Trieste, \url{nicola.torelli@deams.units.it})
+
+Leonardo Egidi (DEAMS, University of Trieste, \url{legidi@units.it})
+
+Francesco Pauli (DEAMS, University of Trieste, \url{francesco.pauli@deams.units.it})\\
+
+\hspace{-0.8cm}
+\textbf{Assignment 1}
+\vspace{0.5cm}
+
+The paper Efron \& Morris, (1975) uses in Table 1 the small baseball data set of Efron and Morris (1975) drawn from the 1970 Major League Baseball season from both leagues (data stored in the file \texttt{EfronMorrisBB.txt}). The data separates the outcome from the initial 45 at-bats from the rest of the season
+
+\begin{table}[H]
+\begin{tabular}{lllcccc}
+ &  FirstName &  LastName & Hits & At.Bats & RemainingAt.Bats & RemainingHits\\
+ \hline
+1    & Roberto &   Clemente &   18 &      45 &              367 &           127\\
+2    &  Frank  & Robinson &  17    &  45            &  426         &  127\\
+3    &  Frank  &   Howard  & 16    &  45             & 521         &  144\\
+4    &    Jay & Johnstone  & 15    &  45             & 275         &   61\\
+5    &    Ken  &    Berry  & 14    &  45            &  418          & 114\\
+6    &    Jim  &  Spencer  & 14    &  45            &  466          & 126\\
+7    &    Don & Kessinger  & 13    &  45             & 586          & 155\\
+8    &   Luis &  Alvarado  & 12    &  45              & 138          &  29\\
+9    &    Ron   &   Santo  & 11    &  45             & 510          & 137\\
+10   &    Ron  &  Swaboda  & 11    &  45             & 200          &  46\\
+11   &   Rico & Petrocelli  & 10    &  45             & 538          & 142\\
+12   &  Ellie  & Rodriguez  & 10    &  45             & 186          &  42\\
+13   & George    &  Scott  & 10    &  45             & 435          & 132\\
+14   &    Del   &   Unser  & 10    &  45             & 277          &  73\\
+15   &  Billy  & Williams  & 10    &  45             & 591          & 195\\
+16   &   Bert & Campaneris   & 9    &  45             & 558          & 159\\
+17   & Thurman   &  Munson   & 8    &  45             & 408          & 129\\
+18     &  Max   &   Alvis   & 7   &   45              & 70           & 14 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{itemize}
+\item Use the following code to access the table elements:
+
+\begin{verbatim}
+N <- dim(df)[1]
+K <- df$At.Bats
+y <- df$Hits
+K_new <- df$RemainingAt.Bats;
+y_new <- df$RemainingHits;
+\end{verbatim}
+where $N$ is the number of items (players). Then for each item $n$, $K_{(n)}$ is the number of initial trials (at-bats), $y_n$ is the number of initial successes (hits), $K\_new_{n}$ is the remaining number of trials (remaining at-bats), and $y\_new_{n}$ is the number of successes in the remaining trials (remaining hits). The remaining data can be used to evaluate the predictive performance of our models conditioned on the observed data. That is, we will “train” on the first 45 at bats and see how well our various models do at predicting the rest of the season.
+\item Assume the following complete-pooling binomial model: $p(y_n| \theta)= \mathsf{Bin}(K_n, \theta)$. Fit the model by using the \texttt{glm} function. Then, specify some possible priors for $\theta$ and fit the model by using \texttt{rstan}. Interpret the results and compare the distinct fits.
+\item Assume now to fit a no-pooling model, which  involves a separate chance-of-success parameter $\theta_n \in [0,1]$ for each item n. Interpret and discuss.
+\item Assume now a multilevel model, where the players are assumed to belong to a population of players (one group for each distinct player). Fit the model by using the \texttt{glmer} function of the package \texttt{lme4}. Then, specify some possible priors for $\theta$ and fit the model by using \texttt{rstan}. Interpret the results and compare the distinct fits. In case of a poor fit evaluate possible model's reparametrizations. Do all players have the same chance of success?
+\item Plot the observed vs estimated chances of success under the models.
+\item Check your models, for instance by using Graphical Posterior Predictive Checks and using Bayesian $p$-values.
+\item Prediction: the question arises as to how well these models predict a player’s performance for the rest of the season based on their initial 45 at bats. Thus, make future held-out data predictions based on the posterior predictive distribution.
+\item Check predictive accuracy of the proposed models with some suited metrics.
+\item We usually recommend fitting simulated data. For all or some of the models, generate data according to the prior and test whether the fitted model recovers the parameter values within their appropriate intervals.
+\item Generate fake data according to the pooling, no-pooling, and one of the hierarchical models. Fit the model and consider the coverage of the posterior 80\% intervals.
+\item How sensitive is the basic no-pooling model to the choice of prior? Consider using knowledge of baseball (as in the logit example) to provide a weakly informative prior for $\theta_n$. How, if at all, does this affect posterior inference?
+\item Compute the James-Stein estimator for the batting averages abilities and then compare it with the Bayesian estimator from the multilevel model and the maximum likelihood estimation obtained through \texttt{glmer}. What is your comment? Interpret and discuss.
+\item Realize a simple Shiny App to visualize the estimates under the different models. 
+\end{itemize}
+
+
+\hspace{-0.8cm}
+\textbf{Assignment 2}
+\vspace{0.5cm}
+
+Exercises 
+
+
+
+
+
+
+
+\end{document}
