@@ -94,7 +94,7 @@
 \title{\large{
 \textbf{Final Exam for \emph{Advanced topics in statistical modeling}}\\
 ADSAI PhD Course 2021-2022 }\\
-Due on: September, 10th}
+Due on: September, 15th}
 %
 %
 \date{}
@@ -113,7 +113,9 @@ Francesco Pauli (DEAMS, University of Trieste, \url{francesco.pauli@deams.units.
 \textbf{Assignment 1}
 \vspace{0.5cm}
 
-The paper Efron \& Morris, (1975) uses in Table 1 the small baseball data set of Efron and Morris (1975) drawn from the 1970 Major League Baseball season from both leagues (data stored in the file \texttt{EfronMorrisBB.txt}). The data separates the outcome from the initial 45 at-bats from the rest of the season
+The paper Efron \& Morris, (1975) uses in Table 1 the small baseball data set of Efron and Morris (1975) drawn from the 1970 Major League Baseball season from both leagues (data stored in the file \texttt{EfronMorrisBB.txt}). Give a look also at the paper Efron \& Morris (1977) for a rather less technical treatment.  The data separates the outcome from the initial 45 at-bats from the rest of the season. A
+batting average is defined, of course, simply as the number of hits divided by
+the number of times at bat; it is always a number between 0 and 1.
 
 \begin{table}[H]
 \begin{tabular}{lllcccc}
@@ -151,27 +153,47 @@ y <- df$Hits
 K_new <- df$RemainingAt.Bats;
 y_new <- df$RemainingHits;
 \end{verbatim}
-where $N$ is the number of items (players). Then for each item $n$, $K_{(n)}$ is the number of initial trials (at-bats), $y_n$ is the number of initial successes (hits), $K\_new_{n}$ is the remaining number of trials (remaining at-bats), and $y\_new_{n}$ is the number of successes in the remaining trials (remaining hits). The remaining data can be used to evaluate the predictive performance of our models conditioned on the observed data. That is, we will “train” on the first 45 at bats and see how well our various models do at predicting the rest of the season.
-\item Assume the following complete-pooling binomial model: $p(y_n| \theta)= \mathsf{Bin}(K_n, \theta)$. Fit the model by using the \texttt{glm} function. Then, specify some possible priors for $\theta$ and fit the model by using \texttt{rstan}. Interpret the results and compare the distinct fits.
-\item Assume now to fit a no-pooling model, which  involves a separate chance-of-success parameter $\theta_n \in [0,1]$ for each item n. Interpret and discuss.
+where $N$ is the number of items (players). Then for each item $n$, $K_{n}$ is the number of initial trials (at-bats), $y_n$ is the number of initial successes (hits), $K\_\text{new}_{n}$ is the remaining number of trials (remaining at-bats), and $y\_\text{new}_{n}$ is the number of successes in the remaining trials (remaining hits). The remaining data can be used to evaluate the predictive performance of our models conditioned on the observed data. That is, we will “train” on the first 45 at bats and see how well our various models do at predicting the rest of the season.
+\item Assume the following complete-pooling binomial model: $p(y_n| \theta)= \mathsf{Bin}(y_n|K_n, \theta)$. Fit the model by using the \texttt{glm} function. Then, specify some possible priors for $\theta$ and fit the model by using \texttt{rstan}. Interpret the results and compare the distinct fits.
+\item Assume now a no-pooling model, which  involves a separate chance-of-success parameter $\theta_n \in [0,1]$ for each item $n$. The prior on each $\theta_n$ is uniform, $p(\theta_n)= \mathsf{Uniform}(\theta_n| 0,1)$.  In such a way, the likelihood is $p(y_n|\theta_n) = \mathsf{Bin}(y_n|K_n, \theta_n)$. Fit the model by using \texttt{rstan}. Interpret and discuss.
 \item Assume now a multilevel model, where the players are assumed to belong to a population of players (one group for each distinct player). Fit the model by using the \texttt{glmer} function of the package \texttt{lme4}. Then, specify some possible priors for $\theta$ and fit the model by using \texttt{rstan}. Interpret the results and compare the distinct fits. In case of a poor fit evaluate possible model's reparametrizations. Do all players have the same chance of success?
 \item Plot the observed vs estimated chances of success under the models.
-\item Check your models, for instance by using Graphical Posterior Predictive Checks and using Bayesian $p$-values.
+\item Check your Bayesian models, for instance by using Graphical Posterior Predictive Checks and using Bayesian $p$-values.
 \item Prediction: the question arises as to how well these models predict a player’s performance for the rest of the season based on their initial 45 at bats. Thus, make future held-out data predictions based on the posterior predictive distribution.
+\item Plot the held-out predictions for the considered models, by acknowledging prediction's uncertainty.
+\item Which is the best calibrated model in the sense of having roughly the right number of actual values fall within the prediction intervals? 
 \item Check predictive accuracy of the proposed models with some suited metrics.
 \item We usually recommend fitting simulated data. For all or some of the models, generate data according to the prior and test whether the fitted model recovers the parameter values within their appropriate intervals.
 \item Generate fake data according to the pooling, no-pooling, and one of the hierarchical models. Fit the model and consider the coverage of the posterior 80\% intervals.
-\item How sensitive is the basic no-pooling model to the choice of prior? Consider using knowledge of baseball (as in the logit example) to provide a weakly informative prior for $\theta_n$. How, if at all, does this affect posterior inference?
-\item Compute the James-Stein estimator for the batting averages abilities and then compare it with the Bayesian estimator from the multilevel model and the maximum likelihood estimation obtained through \texttt{glmer}. What is your comment? Interpret and discuss.
-\item Realize a simple Shiny App to visualize the estimates under the different models. 
+\item How sensitive is the basic no-pooling model to the choice of a prior? Consider using knowledge of baseball to provide a weakly informative prior for $\theta_n$. How, if at all, does this affect posterior inference?
+\item Compute the James-Stein estimator for the batting averages abilities and then compare it with the Bayesian estimator from the multilevel model and the maximum likelihood estimation obtained through \texttt{glmer}. What is your comment? What about the degree of shrinkage of the proposed methods? Interpret and discuss. Hint: you could use the squared loss to compare distinct estimators.
+\item Apply a variant of the JS estimator as proposed by Efron \& Morris (1975). Compute and comment.
+\item Realize a simple Shiny App to visualize the estimates of the baseball players and the corresponding predictions under the different models.
+\item Reverse approach. Consider the proportions of correctly successful pancreatic surgeries obtained from ten prominent US hospitals. Suppose you get the following JS estimates about the intrinsic hospital abilities:
+
+\begin{tabular}{lc}
+New York & 0.64 \\
+Seattle  & 0.41\\
+Chicago  & 0.73 \\
+Miami &  0.55 \\
+St Louis &  0.49 \\
+New Orleans &   0.81 \\
+Denver &  0.75 \\
+Detroit &  0.69 \\
+Boston &  0.71   \\
+Houston & 0.79 \\
+\end{tabular}
+
+Now, construct one (or more!) datasets consistent with these estimates. Fit a multilevel model on these \emph{reverse} data.   Compute the credibility intervals for the hospital abilities and check the model calibration at, say, the 80\% level. Compute these final results with the JS estimates above.
+
 \end{itemize}
 
-
+\vspace{1cm}
 \hspace{-0.8cm}
 \textbf{Assignment 2}
 \vspace{0.5cm}
 
-Exercises 
+
 
 
 
