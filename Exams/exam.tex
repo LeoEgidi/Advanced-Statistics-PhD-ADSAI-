@@ -48,6 +48,7 @@
 \usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{bm}
+\usepackage[utf8]{inputenc}
 %\usepackage{enumitem}
 \DeclareGraphicsExtensions{.pdf,.png,.jpg,.eps}
 %
@@ -94,7 +95,7 @@
 \title{\large{
 \textbf{Final Exam for \emph{Advanced topics in statistical modeling}}\\
 ADSAI PhD Course 2021-2022 }\\
-Due on: September, 15th}
+Due on: Monday, 19th September}
 %
 %
 \date{}
@@ -192,6 +193,17 @@ Now, construct one (or more!) datasets consistent with these estimates. Fit a mu
 \hspace{-0.8cm}
 \textbf{Assignment 2}
 \vspace{0.5cm}
+
+Consider the \texttt{mcycle} data in the \texttt{MASS} package: the data measure the acceleration of the rider’s head, against time,
+in a simulated motorcycle crash.
+\begin{itemize}
+\item  Plot the acceleration against time, and use gam to fit a univariate smooth to the data, selecting the smoothing parameter by GCV. Plot the resulting smooth, with partial residuals, but without standard errors.
+\item Use \texttt{lm} and \texttt{poly} to fit a polynomial to the data, with approximately the same degrees of freedom as was estimated by \texttt{gam}. Use \texttt{termplot} to plot the estimated polynomial and partial residuals. Note the substantially worse fit achieved by the polynomial, relative to the penalized regression spline fit.
+\item It's possible to overstate the importance of penalization in explaining the improvement of the penalized regression spline, relative to the polynomial. Use \texttt{gam} to refit an unpenalized thin plate regression spline to the data, with basis dimension the same as that used for the polynomial, and again produce a plot for comparison with the previous two results.
+\item Redo part (c) using an unpenalized cubic regression spline. You should find a fairly clear ordering of the acceptability of the results for the 4 models tried - what is it?
+\item Now plot the model residuals against time, and comment.
+\item Experiment with the order of penalty used in the smooth. Does increasing it affect the model fit?
+\end{itemize}
 
 
 
